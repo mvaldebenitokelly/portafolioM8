@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}{% if mode == "create" %}Crear Producto{% else %}Editar Producto{% endif %}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="mb-0">{% if mode == "create" %}Crear{% else %}Editar{% endif %} producto</h2>
+  <a class="btn btn-outline-secondary" href="{% url 'catalog:product_list' %}">Volver</a>
+</div>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <form method="post" enctype="multipart/form-data" class="row g-3">
+      {% csrf_token %}
+
+      <div class="col-md-6">
+        <label class="form-label">Nombre</label>
+        {{ form.name }}
+        {% for e in form.name.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Precio</label>
+        {{ form.price }}
+        {% for e in form.price.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Stock</label>
+        {{ form.stock }}
+        {% for e in form.stock.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Categoría</label>
+        {{ form.category }}
+        {% for e in form.category.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+      </div>
+
+      <div class="col-md-6 d-flex align-items-end">
+        <div class="form-check">
+          {{ form.active }}
+          <label class="form-check-label">Activo</label>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Descripción</label>
+        {{ form.description }}
+        {% for e in form.description.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+      </div>
+
+      <div class="col-md-7">
+        <label class="form-label">Imagen (opcional)</label>
+        {{ form.image }}
+        {% for e in form.image.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        <div class="form-text">Formatos comunes: JPG/PNG. Se guarda en <code>media/products/</code>.</div>
+      </div>
+
+      <div class="col-md-5">
+        {% if mode == "edit" and product and product.image %}
+          <div class="border rounded-3 p-2 bg-light">
+            <div class="small text-muted mb-2">Imagen actual</div>
+            <img src="{{ product.image.url }}" alt="Imagen actual" class="img-fluid rounded-3">
+          </div>
+        {% else %}
+          <div class="border rounded-3 p-3 bg-light h-100 d-flex align-items-center justify-content-center text-muted small">
+            Sin imagen cargada
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="col-12">
+        <button class="btn btn-success" type="submit">Guardar</button>
+        <a class="btn btn-secondary" href="{% url 'catalog:product_list' %}">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
